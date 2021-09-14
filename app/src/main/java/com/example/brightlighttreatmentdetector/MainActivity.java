@@ -1,14 +1,11 @@
 package com.example.brightlighttreatmentdetector;
 
-import android.os.CountDownTimer;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.os.SystemClock;
 import android.view.View;
@@ -20,6 +17,7 @@ import android.widget.Toast;
 import android.content.Context;
 import android.util.Log;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,15 +37,17 @@ public class MainActivity extends AppCompatActivity {
     private Sensor lightSensor;
     private SensorEventListener lightEventListener;
     private EditText l;
+    private TextView r;
     private Button mButtonStart;
     private Button mButtonStop;
     private boolean flag = false;
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    //    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     LinkedHashMap<Float, Float> timeLux = new LinkedHashMap<Float, Float>();
     private Chronometer mChronometer;
-//    private ArrayList<String> xaxes = new ArrayList<>();
+    //    private ArrayList<String> xaxes = new ArrayList<>();
     private float temp;
     private float time;
+    private int numberOfDuplicates;
 
     LineChart lineChart;
 
@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         l = (EditText) findViewById(R.id.lux);
+        r = (TextView) findViewById(R.id.result);
+
         mButtonStart = findViewById(R.id.start);
         mButtonStop = findViewById(R.id.stop);
         mChronometer = (Chronometer) findViewById(R.id.cTimer);
@@ -65,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         lineChart = (LineChart) findViewById(R.id.lineChart);
-        ArrayList<String> xAXES = new ArrayList<>();
-        ArrayList<Float> yAXES = new ArrayList<>();
+//        ArrayList<String> xAXES = new ArrayList<>();
+//        ArrayList<Float> yAXES = new ArrayList<>();
         ArrayList<Entry> yAXES_entry = new ArrayList<>();
 
 
@@ -95,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Float> xAXES = new ArrayList<>(timeLux.keySet());
                 ArrayList<Float> yAXES = new ArrayList<>(timeLux.values());
                 for(int i = 0; i < yAXES.size(); ++i){
+                    if(i != 0){
+                        if(yAXES.get(i).equals(yAXES.get(i - 1))){
+                            numberOfDuplicates++;
+                        }
+                    }
                     yAXES_entry.add(new Entry(xAXES.get(i), yAXES.get(i)));
                 }
 
@@ -102,11 +109,18 @@ public class MainActivity extends AppCompatActivity {
                 sett.setDrawCircles(false);
                 sett.setMode(LineDataSet.Mode.CUBIC_BEZIER);
                 sett.setDrawFilled(true);
-                sett.setFillColor(-16711936);
+                sett.setFillColor(-16711936); //green
                 final LineData group = new LineData(sett);
 
                 lineChart.setData(group);
                 lineChart.setVisibleXRangeMaximum(65f);
+
+                float maxTime = xAXES.get(xAXES.size() - 1);
+                float percentage = numberOfDuplicates*5/maxTime*100;
+                DecimalFormat df = new DecimalFormat("0.00");
+                String myword = "It seems like you are sitting in front of the lamp for \"only\" " + numberOfDuplicates*5 + " seconds, which is " + df.format(percentage) + "% of the entire time";
+                r.setText(myword);
+
                 timeLux.clear();
             }
         });
