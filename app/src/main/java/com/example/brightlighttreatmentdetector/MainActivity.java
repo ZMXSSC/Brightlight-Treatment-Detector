@@ -38,16 +38,19 @@ public class MainActivity extends AppCompatActivity {
     private SensorEventListener lightEventListener;
     private EditText l;
     private TextView r;
+    private TextView p;
     private Button mButtonStart;
     private Button mButtonStop;
     private boolean flag = false;
-    //    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     LinkedHashMap<Float, Float> timeLux = new LinkedHashMap<Float, Float>();
     private Chronometer mChronometer;
     //    private ArrayList<String> xaxes = new ArrayList<>();
     private float temp;
     private float time;
     private int numberOfDuplicates;
+    private String currSystemTimeStart;
+    private String currSystemTimeEnd;
 
     LineChart lineChart;
 
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         l = (EditText) findViewById(R.id.lux);
         r = (TextView) findViewById(R.id.result);
+        p = (TextView) findViewById(R.id.period);
 
         mButtonStart = findViewById(R.id.start);
         mButtonStop = findViewById(R.id.stop);
@@ -67,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         lineChart = (LineChart) findViewById(R.id.lineChart);
-//        ArrayList<String> xAXES = new ArrayList<>();
-//        ArrayList<Float> yAXES = new ArrayList<>();
+        
         ArrayList<Entry> yAXES_entry = new ArrayList<>();
 
 
@@ -81,8 +84,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 flag = true;
+                yAXES_entry.clear();
                 mChronometer.setBase(SystemClock.elapsedRealtime()); //Reset the timer
                 mChronometer.start();
+                currSystemTimeStart = dateFormat.format(new Date());
             }
         });
 
@@ -91,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 flag = false;
                 mChronometer.stop();
+                currSystemTimeEnd = dateFormat.format(new Date());
                 for(Map.Entry m:timeLux.entrySet()){
                     System.out.println(m.getKey()+" "+m.getValue());
                 }
@@ -116,11 +122,15 @@ public class MainActivity extends AppCompatActivity {
                 lineChart.setVisibleXRangeMaximum(65f);
 
                 float maxTime = xAXES.get(xAXES.size() - 1);
-                float percentage = numberOfDuplicates*5/maxTime*100;
+                float percentage = numberOfDuplicates * 5 / maxTime * 100;
                 DecimalFormat df = new DecimalFormat("0.00");
-                String myword = "It seems like you are sitting in front of the lamp for \"only\" " + numberOfDuplicates*5 + " seconds, which is " + df.format(percentage) + "% of the entire time";
+                String myword = "It seems like you are sitting in front of the lamp for \"only\" " + numberOfDuplicates * 5 + " seconds, which is " + df.format(percentage) + "% of the entire time";
                 r.setText(myword);
+                String periodTime = "Recording Period: " + currSystemTimeStart + " to " + currSystemTimeEnd;
+                p.setText(periodTime);
 
+                xAXES.clear();
+                yAXES.clear();
                 timeLux.clear();
             }
         });
