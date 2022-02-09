@@ -98,7 +98,7 @@
         android:id="@+id/lineChart"
         android:layout_width="392dp"
         android:layout_height="434dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -134,5 +134,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stop"
         app:layout_constraintVertical_bias="0.0" />
+
+<!--    <Button-->
+<!--        android:id="@+id/screenshot"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Screenshot"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/lineChart"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/cTimer"-->
+<!--        app:layout_constraintHorizontal_bias="0.461"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/start"-->
+<!--        app:layout_constraintVertical_bias="0.709" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
