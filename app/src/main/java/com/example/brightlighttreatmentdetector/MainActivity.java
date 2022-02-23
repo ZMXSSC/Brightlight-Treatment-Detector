@@ -175,8 +175,16 @@ public class MainActivity extends AppCompatActivity {
                 float value = sensorEvent.values[0];
 //                String time = dateFormat.format(new Date());
                 String v = String.valueOf(value);
-                l.setText(v);
+                l.setText(v); // Display lux value onto the textview
 
+                /*
+                Because of the hardware restriction, the sensor value won't be updated(more specifically,
+                onSensorChanged function won't be called) if the the lux value stay the same. However,
+                when we are plotting, it's crucial to record the time where the lux value stays the same.
+                Thus the following code block allow us to keep track of the time where the lux value stays
+                the same, by counting the time between the last time onSensorChanged is called and the
+                current time onSensorChanged is called.
+                 */
                 if(flag){
                     time = (float)(SystemClock.elapsedRealtime() - mChronometer.getBase());
                     time = time / 1000;
