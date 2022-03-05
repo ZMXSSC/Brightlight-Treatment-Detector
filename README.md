@@ -8,3 +8,10 @@ This app can:
 1. Start recording the illuminance once clicking the "start" button.
 2. Stop recording the illuminance, then generate a chart(adapted from [here](https://github.com/PhilJay/MPAndroidChart "Mikephil Android chart")) with the x-axis being time(second), y-axis being the illuminance(lux) by clicking the "stop" button,
 3. Determine if a patient is following the instructions. For example, if the doctor ends up getting a flat chart from the patient, then possibly this patient is sitting in front of the lamp the entire time. However, if the doctor ends up getting an uneven chart, then possibly this patient might not be sitting in front of the lamp the entire time.
+
+## Upcoming features that I'm working on:
+1. Account system that associates with database(i.e. firebase).
+2. "Auto send" in which the user will be able to send the real-time data to the database just so doctors can directly access the data.
+
+### Further feature idea(s):
+1. May associate with wearable device(s) as phone is not that portable.
