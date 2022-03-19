@@ -12,7 +12,7 @@ This app can:
 ## Upcoming features that I'm working on:
 1. Account system that associates with database(i.e. firebase).
 2. "Auto send" in which the user will be able to send the real-time data to the database just so doctors can directly access the data.
-3. Better UI with accommodation(consider the majority of our users are patient, it's important that the UI should not be not too complicated).
+3. Better UI with accommodation(consider the majority of our users are patients, it's important that the UI should not be not too complicated).
 
 ### Further feature idea(s):
 1. May associate with wearable device(s) as phone is not that portable while hanging.
