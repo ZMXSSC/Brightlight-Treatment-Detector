@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                         float theLastKey = new ArrayList<>(timeLux.keySet()).get(timeLux.size() - 1);
 //                        System.out.println("the last key is " + theLastKey);
 //                        System.out.println("the current time is " + time);
-                        while(time - theLastKey > 5){
+                        while(time - theLastKey > 5){ //When there's more than 5s gap between current time and previous time, record previous value
                             theLastKey += 5;
                             timeLux.put(theLastKey,temp);
                         }
