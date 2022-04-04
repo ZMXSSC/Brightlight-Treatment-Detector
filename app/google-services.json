@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1003808853720",
+    "firebase_url": "https://sali-29ce1-default-rtdb.firebaseio.com",
+    "project_id": "sali-29ce1",
+    "storage_bucket": "sali-29ce1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003808853720:android:5a11c7405724df8a0a51ad",
+        "android_client_info": {
+          "package_name": "com.example.brightlighttreatmentdetector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003808853720-b7jillg6k9qapo7ad5g2slq9af38mlbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiMR83R5AcCRT_XY_FRBn6QNyvkozusY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003808853720-b7jillg6k9qapo7ad5g2slq9af38mlbi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
