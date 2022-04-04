@@ -1,5 +1,8 @@
 package com.example.brightlighttreatmentdetector;
 
+
+
+// This is a helper class to encapsulate all the query data
 public class userData {
     String pass_status, actualTime, averageLux, maxLux, minLux, Percentage, totalTime;
 

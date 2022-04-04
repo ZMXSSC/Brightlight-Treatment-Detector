@@ -157,7 +157,9 @@ public class MainActivity extends AppCompatActivity {
 
                 userData userdata = new userData(pass_status, actualTime, averageLux, maxLux, minLux, Percentage, totalTime);
                 user.child(currSystemTimeStart.replaceAll("/", "-")).setValue(userdata);
-                // forward slash doesn't work in firebase
+                // forward slash doesn't work in firebase jason hierarchy
+//                System.out.println("test for the button");
+
             }
         });
 
