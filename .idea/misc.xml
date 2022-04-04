@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/shape_gradient.xml" value="0.2005" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.28404607822973055" />
         <entry key="app/src/main/res/layout/activity_token.xml" value="0.20341880341880342" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.21495726495726497" />
