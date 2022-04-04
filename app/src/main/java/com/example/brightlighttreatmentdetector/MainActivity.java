@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -43,6 +44,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
 
     private SensorManager sensorManager;
@@ -53,19 +57,28 @@ public class MainActivity extends AppCompatActivity {
     private TextView p; // Display the recording period on the right of the screen
     private Button mButtonStart; // Start Button
     private Button mButtonStop; // Stop Button
+    private Button mButtonUpload; // Upload to database button
     private boolean flag = false; // It's not starting yet so set it to false
     private boolean stopFlag = true; // By default it's already "stopped" so true
     SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd HH:mm:ss");
     LinkedHashMap<Float, Float> timeLux = new LinkedHashMap<Float, Float>();
     private Chronometer mChronometer;
     //    private ArrayList<String> xaxes = new ArrayList<>();
-    private float temp;
+    private float temp; // Temporary variable using to record the lux value
     private float time;
-    private int numberOfDuplicates;
+    private float tT; // Total time the user recorded
+    private float percentage; // Percentage of the time user is sitting correctly
+    private float milux; // Minimum Lux
+    private float malux; // Maximum Lux
+    private float aLux; // Average Lux
+    private String token = TokenActivity.getToken(); // Fetch the user token from log in page
+    private int numberOfDuplicates; // number of duplicates lux * 5 is the actual time
     private String currSystemTimeStart;
     private String currSystemTimeEnd;
 
     LineChart lineChart;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference user = database.getReference(token);
 
     /* Everything here is depreciate as the screenshot button is no longer needed
     Button click;
@@ -87,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mButtonStart = findViewById(R.id.start);
+        mButtonUpload = findViewById(R.id.upload);
         mButtonStop = findViewById(R.id.stop);
         mChronometer = (Chronometer) findViewById(R.id.cTimer);
 
@@ -121,6 +135,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Upload button action
+        mButtonUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Write messages to the database
+                String actualTime = String.valueOf(numberOfDuplicates * 5) + "s"; // actualTime
+                String totalTime = String.valueOf(tT) + "s";// totalTime
+                String minLux = String.valueOf(milux) + " lux"; // minlux
+                String maxLux = String.valueOf(malux) + " lux"; // maxlux
+                String averageLux = String.valueOf(aLux) + " lux";// averageLux
+                String Percentage = String.valueOf(percentage) +"%";// percentage
+                String pass_status;
+                if(percentage > 90){
+                    pass_status = "PASS";
+                }
+                else{
+                    pass_status = "NOT PASS";
+                }
+                // PASS?
+
+                userData userdata = new userData(pass_status, actualTime, averageLux, maxLux, minLux, Percentage, totalTime);
+                user.child(currSystemTimeStart.replaceAll("/", "-")).setValue(userdata);
+                // forward slash doesn't work in firebase
+            }
+        });
+
         mButtonStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +173,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     ArrayList<Float> xAXES = new ArrayList<>(timeLux.keySet());
                     ArrayList<Float> yAXES = new ArrayList<>(timeLux.values());
+                    float dummySum = 0; // Just to calculate the sum of lux
                     for (int i = 0; i < yAXES.size(); ++i) {
+                        dummySum = dummySum + yAXES.get(i);
                         if (i != 0) {
                             if (yAXES.get(i).equals(yAXES.get(i - 1))) {
                                 numberOfDuplicates++;
@@ -152,8 +194,11 @@ public class MainActivity extends AppCompatActivity {
                     lineChart.setData(group);
                     lineChart.setVisibleXRangeMaximum(65f);
 
-                    float maxTime = xAXES.get(xAXES.size() - 1);
-                    float percentage = numberOfDuplicates * 5 / maxTime * 100;
+                    milux = Collections.min(yAXES); // Minimum of y-axis(lux)
+                    malux = Collections.max(yAXES); // Maximum of y-axis(lux)
+                    aLux = dummySum / yAXES.size(); // Average of y-axis(lux)
+                    tT = xAXES.get(xAXES.size() - 1);
+                    percentage = numberOfDuplicates * 5 / tT * 100;
                     DecimalFormat df = new DecimalFormat("0.00");
                     String myword = "It seems like you are sitting in front of the lamp for \"only\" " + numberOfDuplicates * 5 + " seconds, which is " + df.format(percentage) + "% of the entire time";
                     r.setText(myword);
@@ -178,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 l.setText(v); // Display lux value onto the textview
 
                 /*
-                Because of the hardware restriction, the sensor value won't be updated(more specifically,
+                Due to the hardware restriction, the sensor value won't be updated(more specifically,
                 onSensorChanged function won't be called) if the the lux value stay the same. However,
                 when we are plotting, it's crucial to record the time where the lux value stays the same.
                 Thus the following code block allow us to keep track of the time where the lux value stays
