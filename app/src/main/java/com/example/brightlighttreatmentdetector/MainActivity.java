@@ -126,6 +126,9 @@ public class MainActivity extends AppCompatActivity {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mButtonStop.setVisibility(View.VISIBLE);
+                mButtonStart.setVisibility(View.GONE);
+
                 flag = true;
                 yAXES_entry.clear();
                 mChronometer.setBase(SystemClock.elapsedRealtime()); //Reset the timer
@@ -168,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 flag = false;
                 if(!stopFlag) {
+
+                    mButtonStart.setVisibility(View.VISIBLE);
+                    mButtonStop.setVisibility(View.GONE);
+
                     mChronometer.stop();
                     currSystemTimeEnd = dateFormat.format(new Date());
                     for (Map.Entry m : timeLux.entrySet()) {

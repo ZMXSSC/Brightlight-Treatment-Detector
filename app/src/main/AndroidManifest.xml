@@ -12,7 +12,8 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BrightLightTreatmentDetector">
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+<!--        android:theme="@style/Theme.BrightLightTreatmentDetector"-->
         <activity
             android:name=".TokenActivity"
             android:exported="true">
