@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private float milux; // Minimum Lux
     private float malux; // Maximum Lux
     private float aLux; // Average Lux
-    private String token = TokenActivity.getToken(); // Fetch the user token from log in page
+    private final String token = TokenActivity.getToken(); // Fetch the user token from log in page
     private int numberOfDuplicates; // number of duplicates lux * 5 is the actual time
     private String currSystemTimeStart;
     private String currSystemTimeEnd;
@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
                 userData userdata = new userData(pass_status, actualTime, averageLux, maxLux, minLux, Percentage, totalTime);
                 user.child(currSystemTimeStart.replaceAll("/", "-")).setValue(userdata);
+                Toast.makeText(getApplicationContext(),"If you have the internet access, your data should be uploaded. Thank you!",Toast.LENGTH_LONG).show();
                 // forward slash doesn't work in firebase jason hierarchy
 //                System.out.println("test for the button");
 
@@ -209,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
                     tT = xAXES.get(xAXES.size() - 1);
                     percentage = numberOfDuplicates * 5 / tT * 100;
                     DecimalFormat df = new DecimalFormat("0.00");
-                    String myword = "It seems like you are sitting in front of the lamp for \"only\" " + numberOfDuplicates * 5 + " seconds, which is " + df.format(percentage) + "% of the entire time";
+                    String myword = "It seems like you are sitting in front of the lightbox for " + numberOfDuplicates * 5 + " seconds, which is " + df.format(percentage) + "% of the entire time";
                     r.setText(myword);
                     String periodTime = "Recording Period: " + currSystemTimeStart + " to " + currSystemTimeEnd;
                     p.setText(periodTime);
@@ -334,3 +335,10 @@ Everything below is depreciate as the screenshot button is no longer needed
 //    }
 }
 
+/*
+1. Confirm Firebase upload time and add two rows for start and end time
+2. Set the percentage for lux > 100
+3. Confirm if multiple upload is clicked, would they be queued?
+4. Add more data analysis(std?)
+5. Think of a way to send app file and have director to download them to Android phones
+ */
